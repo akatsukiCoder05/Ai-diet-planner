@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 
-// Environment variables
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+// Environment variables - backend hosted on Render
+const API_URL = import.meta.env.VITE_API_URL || 'https://ai-diet-planner-uko9.onrender.com';
 const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY;
 
 // Direct fetch helper for Groq API (no SDK = no module-level crash)
