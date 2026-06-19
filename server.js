@@ -45,7 +45,7 @@ app.get('/api/health', (req, res) => {
 // ─────────────────────────────────────────────────────────
 app.post('/api/generate-plan', async (req, res) => {
   try {
-    const { age, gender, height, weight, activityLevel, goal } = req.body;
+    const { age, gender, height, weight, activityLevel, goal, dietType, exclusions } = req.body;
 
     const GROQ_API_KEY = process.env.GROQ_API_KEY || process.env.VITE_GROQ_API_KEY || process.env.GROQ_KEY;
     if (!GROQ_API_KEY) {
@@ -62,6 +62,8 @@ Height: ${height} cm
 Weight: ${weight} kg
 Activity Level: ${activityLevel}
 Goal: ${goal}
+Dietary Preference: ${dietType || 'Standard'}
+Allergies / Exclude Ingredients: ${exclusions || 'None'}
 
 FORMAT STRICTLY LIKE THIS:
 
@@ -154,6 +156,87 @@ RULES:
   } catch (error) {
     console.error('Error generating diet plan:', error);
     res.status(500).json({ error: 'Failed to generate diet plan', details: error.message });
+  }
+});
+
+// Generate AI Recipes and Nutrition Search (calls Groq server-side)
+app.post('/api/generate-recipe', async (req, res) => {
+  try {
+    const { query, dietType, exclusions } = req.body;
+    if (!query) {
+      return res.status(400).json({ error: 'Search query is required' });
+    }
+
+    const GROQ_API_KEY = process.env.GROQ_API_KEY || process.env.VITE_GROQ_API_KEY || process.env.GROQ_KEY;
+    if (!GROQ_API_KEY) {
+      return res.status(500).json({ error: 'API key not found. Add GROQ_KEY in environment variables.' });
+    }
+
+    const prompt = `
+Create a healthy recipe or provide nutritional details based on the following search/request: "${query}".
+
+Ensure the recipe strictly adheres to these dietary guidelines:
+Diet Preference: ${dietType || 'Standard'}
+Allergies / Exclusions: ${exclusions || 'None'}
+
+FORMAT THE RESPONSE STRICTLY LIKE THIS (Do not output anything else, no introduction, no conversational text):
+
+TITLE: (A clean, catchy recipe name or food title)
+
+STATS:
+- Calories: (number only) kcal
+- Protein: (number only)g
+- Carbs: (number only)g
+- Fats: (number only)g
+- Prep Time: (number only) mins
+- Cook Time: (number only) mins
+
+INGREDIENTS:
+- Item 1 with quantity
+- Item 2 with quantity
+- Item 3 with quantity
+
+INSTRUCTIONS:
+1. Step 1 detail
+2. Step 3 detail
+3. Step 2 detail (etc)
+
+NUTRITION INFO:
+- Brief note on key health benefits of this food/recipe (1-2 sentences).
+`;
+
+    const groqResponse = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${GROQ_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: 'llama-3.3-70b-versatile',
+        messages: [
+          {
+            role: 'system',
+            content: 'You are an expert culinary chef and nutritionist. Always return recipes in the requested format precisely, using clean bullet points and lists. Never include conversational prefix or suffix text.',
+          },
+          { role: 'user', content: prompt },
+        ],
+        temperature: 0.7,
+        max_tokens: 1200,
+      }),
+    });
+
+    if (!groqResponse.ok) {
+      const errText = await groqResponse.text();
+      return res.status(502).json({ error: 'Groq API error', details: errText });
+    }
+
+    const data = await groqResponse.json();
+    const content = data.choices[0].message.content;
+
+    res.json({ success: true, content });
+  } catch (error) {
+    console.error('Error generating recipe:', error);
+    res.status(500).json({ error: 'Failed to generate recipe', details: error.message });
   }
 });
 

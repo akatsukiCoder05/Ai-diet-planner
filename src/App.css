@@ -19,6 +19,9 @@
   --amber:      #FBBF24;
   --red:        #F87171;
   --red-dim:    rgba(248,113,113,0.1);
+  --pink:       #EC4899;
+  --pink-dim:   rgba(236, 72, 153, 0.1);
+  --pink-glow:  rgba(236, 72, 153, 0.25);
 
   --t1: #F1F5F9;
   --t2: #94A3B8;
@@ -212,6 +215,8 @@ body {
   backdrop-filter: blur(20px);
   border: 1px solid var(--border);
   border-radius: var(--r-lg);
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 
 .form-card { padding: 28px; }
@@ -816,3 +821,1885 @@ body {
   background: var(--indigo);
   box-shadow: 0 0 6px var(--indigo);
 }
+
+/* ═══════════ AI RECIPE HUB & WORKOUT COMPANION STYLES ═══════════ */
+
+/* Search bar & suggestion chips */
+.search-card {
+  padding: 24px;
+  margin-bottom: 24px;
+}
+.search-box-container {
+  display: flex;
+  position: relative;
+  align-items: center;
+  width: 100%;
+  gap: 12px;
+}
+.search-icon {
+  position: absolute;
+  left: 16px;
+  color: var(--t3);
+  pointer-events: none;
+}
+.search-input {
+  flex-grow: 1;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 14px 14px 14px 48px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 15px;
+  color: var(--t1);
+  outline: none;
+  transition: all 0.3s ease;
+}
+.search-input:focus {
+  border-color: var(--cyan);
+  background: rgba(34, 211, 238, 0.04);
+  box-shadow: 0 0 15px rgba(34, 211, 238, 0.1);
+}
+.search-btn {
+  width: auto !important;
+  padding: 14px 24px !important;
+  flex-shrink: 0;
+}
+
+.recipe-suggestions {
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.suggestion-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--t3);
+  font-weight: 700;
+}
+.suggestion-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.suggestion-chip {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  color: var(--t2);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.suggestion-chip:hover {
+  background: var(--cyan-dim);
+  border-color: var(--cyan);
+  color: var(--cyan);
+}
+
+/* Loading Card */
+.loading-card-recipe {
+  padding: 48px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  animation: fadeUp 0.4s ease-out both;
+}
+.loader-icon-recipe {
+  font-size: 40px;
+  color: var(--cyan);
+  text-shadow: 0 0 10px var(--cyan-glow);
+}
+.loading-card-recipe h3 {
+  font-size: 16px;
+  font-weight: 700;
+}
+.loading-card-recipe p {
+  font-size: 13px;
+  color: var(--t2);
+  max-width: 400px;
+}
+
+/* Checklist items & details styling */
+.recipe-results {
+  animation: fadeUp 0.4s ease-out both;
+}
+.recipe-results-header {
+  margin-bottom: 24px;
+}
+.recipe-results-header h2 {
+  font-size: 26px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+.recipe-desc {
+  font-size: 14px;
+  color: var(--t2);
+  line-height: 1.5;
+  font-weight: 300;
+}
+
+/* Ingredients Checklist */
+.recipe-ingredients-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.checkbox-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+.checkbox-item input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+.checkbox-custom {
+  width: 18px;
+  height: 18px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  margin-top: 1px;
+}
+.checkbox-item:hover input ~ .checkbox-custom {
+  border-color: var(--cyan);
+  background: rgba(34, 211, 238, 0.05);
+}
+.checkbox-item input:checked ~ .checkbox-custom {
+  background: var(--cyan);
+  border-color: var(--cyan);
+  box-shadow: 0 0 10px var(--cyan-glow);
+}
+.checkbox-custom::after {
+  content: "";
+  display: none;
+  width: 5px;
+  height: 9px;
+  border: solid #07101F;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg) translate(-0.5px, -1px);
+}
+.checkbox-item input:checked ~ .checkbox-custom::after {
+  display: block;
+}
+.checkbox-label {
+  font-size: 13px;
+  color: var(--t2);
+  line-height: 1.4;
+  transition: color 0.2s ease;
+}
+.checkbox-item input:checked ~ .checkbox-label {
+  color: var(--t3);
+  text-decoration: line-through;
+}
+
+/* Cooking Steps */
+.recipe-instructions-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.instruction-step {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.step-number {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--indigo-dim);
+  border: 1px solid rgba(129, 140, 248, 0.2);
+  color: var(--indigo);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.step-text {
+  font-size: 13px;
+  color: var(--t2);
+  line-height: 1.5;
+  padding-top: 2px;
+}
+
+/* ════════ WORKOUT COMPANION STYLES ════════ */
+.workout-control-card {
+  padding: 20px;
+}
+.workout-control-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.workout-control-row .field {
+  min-width: 200px;
+}
+.workout-header-stats {
+  display: flex;
+  gap: 16px;
+}
+.w-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.w-stat-lbl {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--t3);
+}
+.w-stat-val {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* Days Nav Grid */
+.workout-days-nav {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-bottom: 20px;
+}
+@media (max-width: 700px) {
+  .workout-days-nav {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+.workout-day-btn {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 12px 6px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.workout-day-btn:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+.workout-day-btn.active {
+  background: var(--indigo-dim);
+  border-color: var(--indigo);
+  box-shadow: 0 0 12px rgba(129, 140, 248, 0.15);
+}
+.workout-day-btn .day-name {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--t3);
+}
+.workout-day-btn.active .day-name {
+  color: var(--indigo);
+}
+.workout-day-btn .day-focus-short {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--t2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+.workout-day-btn.active .day-focus-short {
+  color: var(--t1);
+}
+
+/* Exercises Checklist Tracker */
+.workout-progress-bar-container {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+.workout-progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--indigo), var(--cyan));
+  border-radius: 10px;
+  transition: width 0.3s ease;
+  box-shadow: 0 0 8px var(--indigo);
+}
+
+.workout-exercises-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.workout-exercise-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.01);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+.workout-exercise-item input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0; width: 0;
+}
+.workout-exercise-item:hover {
+  background: rgba(255, 255, 255, 0.025);
+  border-color: rgba(129, 140, 248, 0.2);
+}
+.workout-exercise-item.checked {
+  background: rgba(129, 140, 248, 0.03);
+  border-color: rgba(129, 140, 248, 0.15);
+}
+.workout-exercise-item input ~ .checkbox-custom {
+  border-color: var(--border);
+}
+.workout-exercise-item:hover input ~ .checkbox-custom {
+  border-color: var(--indigo);
+}
+.workout-exercise-item input:checked ~ .checkbox-custom {
+  background: var(--indigo);
+  border-color: var(--indigo);
+  box-shadow: 0 0 10px rgba(129, 140, 248, 0.3);
+}
+.workout-exercise-item input:checked ~ .checkbox-custom::after {
+  border-color: #07101F;
+}
+.exercise-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.exercise-name {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--t1);
+  transition: color 0.2s ease;
+}
+.workout-exercise-item.checked .exercise-name {
+  color: var(--t3);
+  text-decoration: line-through;
+}
+.exercise-detail {
+  font-size: 11.5px;
+  color: var(--t2);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 500;
+}
+.workout-exercise-item.checked .exercise-detail {
+  color: var(--t3);
+}
+
+/* ════════ TIMER STYLES ════════ */
+.rest-timer-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px;
+}
+.timer-display-container {
+  display: flex;
+  justify-content: center;
+  margin: 18px 0;
+  width: 100%;
+}
+.timer-svg-wrapper {
+  position: relative;
+  width: 180px;
+  height: 180px;
+}
+.timer-svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+.timer-track {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.03);
+  stroke-width: 5;
+}
+.timer-fill {
+  fill: none;
+  stroke: var(--green);
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-dasharray: 282.7;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 1s linear;
+  filter: drop-shadow(0 0 6px rgba(52, 211, 153, 0.4));
+}
+.timer-text-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.timer-time {
+  font-size: 38px;
+  font-weight: 800;
+  color: var(--t1);
+  letter-spacing: -0.5px;
+}
+.timer-status-lbl {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--t3);
+  letter-spacing: 0.05em;
+  margin-top: -2px;
+}
+
+.timer-presets {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.timer-preset-btn {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  color: var(--t2);
+  padding: 6px 16px;
+  border-radius: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.timer-preset-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(52, 211, 153, 0.3);
+}
+.timer-preset-btn.active {
+  background: var(--green-dim);
+  border-color: var(--green);
+  color: var(--green);
+}
+
+.timer-controls {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+.timer-btn-start {
+  flex-grow: 1;
+  background: linear-gradient(135deg, var(--green) 0%, rgba(52, 211, 153, 0.6) 100%) !important;
+  color: #07101F !important;
+  border: 1px solid rgba(52, 211, 153, 0.3) !important;
+  box-shadow: 0 4px 15px rgba(52, 211, 153, 0.2) !important;
+  font-size: 13.5px !important;
+  padding: 10px !important;
+}
+.timer-btn-start:hover {
+  background: linear-gradient(135deg, var(--green) 0%, rgba(52, 211, 153, 0.8) 100%) !important;
+  box-shadow: 0 4px 22px rgba(52, 211, 153, 0.35) !important;
+}
+.timer-btn-pause {
+  flex-grow: 1;
+  font-size: 13.5px !important;
+  padding: 10px !important;
+}
+.timer-btn-reset {
+  flex-shrink: 0;
+  padding: 10px 14px !important;
+}
+
+/* ─── THUMBNAIL CARD EXTENSIONS ─── */
+.ingredient-card {
+  align-items: center !important;
+  padding: 8px 14px !important;
+  background: rgba(255, 255, 255, 0.015);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  transition: all 0.2s ease;
+  width: 100%;
+}
+.ingredient-card:hover {
+  background: rgba(255, 255, 255, 0.035);
+  border-color: rgba(34, 211, 238, 0.25);
+  box-shadow: 0 0 10px rgba(34, 211, 238, 0.05);
+}
+.ingredient-img-wrapper {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--r-sm);
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.3);
+  margin: 0 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ingredient-img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.ingredient-card:hover .ingredient-img-wrapper img {
+  transform: scale(1.12);
+}
+
+/* ═══════════ HYDRATION TRACKER & SETTINGS PANELS ═══════════ */
+
+/* Hydration Wave Container */
+.wave-container {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 2px solid var(--cyan);
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 15px var(--cyan-glow);
+  flex-shrink: 0;
+}
+
+.wave-fill {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: linear-gradient(180deg, var(--cyan) 0%, rgba(129, 140, 248, 0.6) 100%);
+  transition: height 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  filter: drop-shadow(0 0 4px var(--cyan-glow));
+}
+
+.wave {
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  bottom: 95%;
+  left: -50%;
+  background: var(--card-solid);
+  border-radius: 38%;
+  animation: waveRotate 8s linear infinite;
+  pointer-events: none;
+}
+
+.wave-1 {
+  opacity: 0.9;
+  animation-duration: 7s;
+}
+
+.wave-2 {
+  opacity: 0.6;
+  animation-duration: 9s;
+  animation-delay: -3s;
+  border-radius: 35%;
+}
+
+@keyframes waveRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.wave-percentage {
+  position: relative;
+  z-index: 10;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--t1);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Settings allergen grid alignment */
+.allergens-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 8px;
+}
+@media (max-width: 480px) {
+  .allergens-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ════════════ 3D KINETIC ENERGY CORE ANIMATIONS ════════════ */
+
+.kinetic-core-card {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid var(--border);
+  background: var(--card-solid);
+}
+
+/* Dynamic Core Auras based on Active Mode */
+.kinetic-core-card.active-mode-sync {
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4), 0 0 15px rgba(99, 102, 241, 0.05);
+}
+.kinetic-core-card.active-mode-zen {
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4), 0 0 15px rgba(16, 185, 129, 0.05);
+}
+.kinetic-core-card.active-mode-overdrive {
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4), 0 0 25px rgba(236, 72, 153, 0.12);
+  border-color: rgba(236, 72, 153, 0.3);
+}
+
+/* Blast State Card Pulse */
+.kinetic-core-card.blasting {
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.6), 0 0 35px rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.core-status-badge {
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.05em;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  color: var(--t2);
+  transition: all 0.3s ease;
+}
+
+.active-mode-sync .core-status-badge {
+  color: var(--indigo);
+  border-color: rgba(129, 140, 248, 0.3);
+  background: rgba(129, 140, 248, 0.05);
+}
+
+.active-mode-zen .core-status-badge {
+  color: var(--green);
+  border-color: rgba(16, 185, 129, 0.3);
+  background: rgba(16, 185, 129, 0.05);
+}
+
+.active-mode-overdrive .core-status-badge {
+  color: #ec4899;
+  border-color: rgba(236, 72, 153, 0.3);
+  background: rgba(236, 72, 153, 0.05);
+  animation: textGlowPulse 1.5s infinite ease-in-out;
+}
+
+@keyframes textGlowPulse {
+  0%, 100% { text-shadow: 0 0 4px rgba(236, 72, 153, 0.5); }
+  50% { text-shadow: 0 0 10px rgba(236, 72, 153, 0.9); }
+}
+
+/* 3D Scene Viewport */
+.kinetic-core-scene-container {
+  height: 240px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1200px;
+  position: relative;
+  overflow: visible;
+  margin: 10px 0;
+}
+
+.kinetic-3d-scene {
+  width: 180px;
+  height: 180px;
+  position: relative;
+  transform-style: preserve-3d;
+  transform: rotateX(20deg);
+  animation: sceneAutoSpin calc(25s / var(--speed-mult)) linear infinite;
+}
+
+@keyframes sceneAutoSpin {
+  0% { transform: rotateX(20deg) rotateY(0deg) rotateZ(0deg); }
+  100% { transform: rotateX(20deg) rotateY(360deg) rotateZ(0deg); }
+}
+
+/* Central Core */
+.kinetic-center-core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transform-style: preserve-3d;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.core-glow-sphere {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--indigo) 0%, rgba(6, 182, 212, 0.4) 50%, transparent 70%);
+  transform: translate(-50%, -50%) scale(1);
+  filter: blur(14px);
+  animation: corePulse 2s infinite ease-in-out;
+  pointer-events: none;
+}
+
+.barbell-core-icon {
+  font-size: 42px !important;
+  color: #fff;
+  text-shadow: 0 0 12px rgba(129, 140, 248, 0.9), 0 0 25px rgba(6, 182, 212, 0.5);
+  animation: coreRotatePulse 3s infinite ease-in-out;
+}
+
+@keyframes corePulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.6; }
+  35% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.95; }
+  50% { transform: translate(-50%, -50%) scale(1.05); opacity: 0.8; }
+  70% { transform: translate(-50%, -50%) scale(1.25); opacity: 1; }
+}
+
+@keyframes coreRotatePulse {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.1) rotate(180deg); }
+}
+
+/* Concentric Rings Base */
+.kinetic-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  box-sizing: border-box;
+  transform-style: preserve-3d;
+  display: flex;
+  justify-content: center;
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ring-label {
+  position: absolute;
+  top: -6px;
+  font-size: 8px;
+  font-family: var(--font-mono);
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  color: #fff;
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
+  pointer-events: none;
+}
+
+/* Ring Outer: STRENGTH (Cyan) */
+.ring-outer {
+  width: 190px;
+  height: 190px;
+  margin-top: -95px;
+  margin-left: -95px;
+  border: 2px dashed rgba(6, 182, 212, 0.65);
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.15), inset 0 0 10px rgba(6, 182, 212, 0.15);
+  transform: rotateX(75deg);
+  animation: rotateRingOuter calc(15s / var(--speed-mult)) linear infinite;
+}
+
+@keyframes rotateRingOuter {
+  from { transform: rotateX(75deg) rotateY(0deg) rotateZ(0deg); }
+  to { transform: rotateX(75deg) rotateY(0deg) rotateZ(360deg); }
+}
+
+/* Ring Middle: AGILITY (Indigo/Pink) */
+.ring-middle {
+  width: 145px;
+  height: 145px;
+  margin-top: -72.5px;
+  margin-left: -72.5px;
+  border: 2px dotted rgba(129, 140, 248, 0.85);
+  box-shadow: 0 0 12px rgba(129, 140, 248, 0.2), inset 0 0 12px rgba(129, 140, 248, 0.2);
+  transform: rotateY(55deg) rotateX(15deg);
+  animation: rotateRingMiddle calc(20s / var(--speed-mult)) linear infinite reverse;
+}
+
+@keyframes rotateRingMiddle {
+  from { transform: rotateY(55deg) rotateX(15deg) rotateZ(0deg); }
+  to { transform: rotateY(55deg) rotateX(15deg) rotateZ(360deg); }
+}
+
+/* Ring Inner: ENDURANCE (Emerald) */
+.ring-inner {
+  width: 105px;
+  height: 105px;
+  margin-top: -52.5px;
+  margin-left: -52.5px;
+  border: 2.5px dashed rgba(16, 185, 129, 0.8);
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.3), inset 0 0 15px rgba(16, 185, 129, 0.3);
+  transform: rotateX(-45deg) rotateY(45deg);
+  animation: rotateRingInner calc(10s / var(--speed-mult)) linear infinite;
+}
+
+@keyframes rotateRingInner {
+  from { transform: rotateX(-45deg) rotateY(45deg) rotateZ(0deg); }
+  to { transform: rotateX(-45deg) rotateY(45deg) rotateZ(360deg); }
+}
+
+/* Blast State Ring Expansion styles */
+.blasting .ring-outer {
+  transform: rotateX(75deg) scale(1.35);
+  border-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.6);
+}
+.blasting .ring-middle {
+  transform: rotateY(55deg) rotateX(15deg) scale(1.4);
+  border-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.6);
+}
+.blasting .ring-inner {
+  transform: rotateX(-45deg) rotateY(45deg) scale(1.45);
+  border-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.6);
+}
+
+/* Orbiting 3D Particles */
+.kinetic-orbit-particle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-top: -4px;
+  margin-left: -4px;
+  transform-style: preserve-3d;
+  pointer-events: none;
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Particle 1: Cyan Glow */
+.kinetic-orbit-particle.p1 {
+  background: var(--cyan);
+  box-shadow: 0 0 10px var(--cyan), 0 0 20px var(--cyan);
+  animation: orbitP1 calc(7s / var(--speed-mult)) linear infinite;
+}
+@keyframes orbitP1 {
+  0% { transform: rotateY(0deg) rotateX(20deg) translateZ(105px) rotateY(0deg); }
+  100% { transform: rotateY(360deg) rotateX(20deg) translateZ(105px) rotateY(-360deg); }
+}
+
+/* Particle 2: Indigo Glow */
+.kinetic-orbit-particle.p2 {
+  background: var(--indigo);
+  box-shadow: 0 0 10px var(--indigo), 0 0 20px var(--indigo);
+  animation: orbitP2 calc(5s / var(--speed-mult)) linear infinite reverse;
+}
+@keyframes orbitP2 {
+  0% { transform: rotateX(45deg) rotateY(0deg) translateZ(80px) rotateX(-45deg); }
+  100% { transform: rotateX(45deg) rotateY(360deg) translateZ(80px) rotateX(-45deg); }
+}
+
+/* Particle 3: Emerald Glow */
+.kinetic-orbit-particle.p3 {
+  background: var(--green);
+  box-shadow: 0 0 10px var(--green), 0 0 20px var(--green);
+  animation: orbitP3 calc(3.8s / var(--speed-mult)) linear infinite;
+}
+@keyframes orbitP3 {
+  0% { transform: rotateZ(30deg) rotateY(0deg) translateZ(62px) rotateZ(-30deg); }
+  100% { transform: rotateZ(30deg) rotateY(360deg) translateZ(62px) rotateZ(-30deg); }
+}
+
+/* Particle 4: Pink Glow */
+.kinetic-orbit-particle.p4 {
+  background: #ec4899;
+  box-shadow: 0 0 10px #ec4899, 0 0 20px #ec4899;
+  animation: orbitP4 calc(9.5s / var(--speed-mult)) linear infinite;
+}
+@keyframes orbitP4 {
+  0% { transform: rotateX(-30deg) rotateZ(10deg) rotateY(0deg) translateZ(125px) rotateY(0deg); }
+  100% { transform: rotateX(-30deg) rotateZ(10deg) rotateY(360deg) translateZ(125px) rotateY(-360deg); }
+}
+
+/* Blasting State Particle Ejection */
+.blasting .kinetic-orbit-particle.p1 {
+  transform: rotateY(180deg) translateZ(210px) scale(1.8) !important;
+  background: #fff;
+  box-shadow: 0 0 18px #fff;
+}
+.blasting .kinetic-orbit-particle.p2 {
+  transform: rotateX(180deg) translateZ(190px) scale(1.8) !important;
+  background: #fff;
+  box-shadow: 0 0 18px #fff;
+}
+.blasting .kinetic-orbit-particle.p3 {
+  transform: rotateZ(180deg) translateZ(170px) scale(1.8) !important;
+  background: #fff;
+  box-shadow: 0 0 18px #fff;
+}
+.blasting .kinetic-orbit-particle.p4 {
+  transform: rotateX(-180deg) translateZ(230px) scale(1.8) !important;
+  background: #fff;
+  box-shadow: 0 0 18px #fff;
+}
+
+/* Blast Shockwave */
+.kinetic-shockwave {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80px;
+  height: 80px;
+  margin-top: -40px;
+  margin-left: -40px;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 20px #fff, inset 0 0 20px #fff;
+  animation: shockwaveExpand 0.9s cubic-bezier(0.08, 0.8, 0.2, 1) forwards;
+  pointer-events: none;
+  transform-style: preserve-3d;
+}
+
+@keyframes shockwaveExpand {
+  0% { transform: translateZ(0px) scale(0.1); opacity: 1; border-color: var(--cyan); }
+  50% { border-color: var(--indigo); opacity: 0.9; }
+  100% { transform: translateZ(40px) scale(3.2); opacity: 0; border-color: var(--green); }
+}
+
+/* Controls Panel Styling */
+.core-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 15px;
+  width: 100%;
+}
+
+.mode-toggle-group {
+  display: flex;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 3px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.mode-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--t3);
+  padding: 7px 10px;
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: center;
+}
+
+.mode-btn:hover {
+  color: var(--t1);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.mode-btn.active {
+  color: #fff;
+  font-weight: 800;
+}
+
+.active-mode-sync .mode-btn.active {
+  background: rgba(129, 140, 248, 0.25);
+  border: 1px solid rgba(129, 140, 248, 0.4);
+  box-shadow: 0 0 10px rgba(129, 140, 248, 0.15);
+}
+
+.active-mode-zen .mode-btn.active {
+  background: rgba(16, 185, 129, 0.2);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.15);
+}
+
+.active-mode-overdrive .mode-btn.active {
+  background: rgba(236, 72, 153, 0.25);
+  border: 1px solid rgba(236, 72, 153, 0.45);
+  box-shadow: 0 0 12px rgba(236, 72, 153, 0.2);
+}
+
+.blast-btn {
+  width: 100%;
+  padding: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border-radius: 8px;
+  background: var(--indigo);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.blast-btn:hover:not(:disabled) {
+  background: #fff;
+  color: #000;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+  transform: translateY(-1px);
+}
+
+.blast-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ════════════ 3D BIOMETRIC HELIX / DNA STRAND (PLAN VIEW) ════════════ */
+
+.dna-helix-card {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  min-height: 380px;
+}
+
+.dna-viewport-container {
+  height: 240px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1000px;
+  position: relative;
+  overflow: visible;
+  margin: 10px 0;
+}
+
+.dna-scene {
+  width: 120px;
+  height: 220px;
+  position: relative;
+  transform-style: preserve-3d;
+  animation: dnaRotate 12s linear infinite;
+}
+
+@keyframes dnaRotate {
+  from { transform: rotateY(0deg); }
+  to { transform: rotateY(360deg); }
+}
+
+.dna-rung {
+  position: absolute;
+  height: 4px;
+  width: 100px;
+  top: calc(var(--i) * 16px + 10px);
+  left: 10px;
+  transform-style: preserve-3d;
+  transform: rotateY(calc(var(--i) * 30deg));
+}
+
+.dna-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  position: absolute;
+  top: -3px;
+  transition: all 0.3s ease;
+}
+
+.dna-dot.dot-a {
+  left: 0;
+  animation: dotPulse 2s infinite ease-in-out;
+  animation-delay: calc(var(--i) * -0.2s);
+}
+
+.dna-dot.dot-b {
+  right: 0;
+  animation: dotPulse 2s infinite ease-in-out;
+  animation-delay: calc(var(--i) * -0.2s - 1s);
+}
+
+@keyframes dotPulse {
+  0%, 100% { transform: scale(1); filter: brightness(1); }
+  50% { transform: scale(1.35); filter: brightness(1.4); }
+}
+
+.dna-bar {
+  position: absolute;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.12);
+  top: 1px;
+  left: 6px;
+  right: 6px;
+  box-shadow: 0 0 2px rgba(255, 255, 255, 0.05);
+}
+
+/* Dynamic Goal Colors for Helix Dots */
+.goal-lose-weight .dna-dot {
+  background: var(--cyan);
+  box-shadow: 0 0 8px var(--cyan);
+}
+.goal-gain-muscle .dna-dot {
+  background: #ec4899;
+  box-shadow: 0 0 8px #ec4899;
+}
+.goal-maintain-weight .dna-dot {
+  background: var(--indigo);
+  box-shadow: 0 0 8px var(--indigo);
+}
+.goal-improve-health .dna-dot {
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green);
+}
+
+/* ════════════ 3D MACRO NUTRIENT MOLECULE (DASHBOARD) ════════════ */
+
+.macro-card-wrapper {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  width: 100%;
+}
+
+@media (max-width: 480px) {
+  .macro-card-wrapper {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .macro-3d-visualizer {
+    margin: 15px auto 0;
+  }
+}
+
+.macro-3d-visualizer {
+  width: 120px;
+  height: 120px;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 500px;
+}
+
+.macro-3d-scene {
+  width: 100px;
+  height: 100px;
+  position: relative;
+  transform-style: preserve-3d;
+  transform: rotateX(15deg);
+  animation: macroSceneSpin 15s linear infinite;
+}
+
+@keyframes macroSceneSpin {
+  from { transform: rotateX(15deg) rotateY(0deg); }
+  to { transform: rotateX(15deg) rotateY(360deg); }
+}
+
+.macro-nucleus {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 18px;
+  height: 18px;
+  margin-top: -9px;
+  margin-left: -9px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff 0%, rgba(99, 102, 241, 0.4) 60%, transparent 100%);
+  box-shadow: 0 0 15px #fff, 0 0 25px rgba(99, 102, 241, 0.6);
+  z-index: 10;
+}
+
+.macro-orbit {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 1px dashed rgba(255, 255, 255, 0.08);
+  box-sizing: border-box;
+  transform-style: preserve-3d;
+}
+
+.macro-orbit.m-protein {
+  animation: orbitProtein 4s linear infinite;
+}
+@keyframes orbitProtein {
+  from { transform: rotateX(60deg) rotateY(20deg) rotateZ(0deg); }
+  to { transform: rotateX(60deg) rotateY(20deg) rotateZ(360deg); }
+}
+
+.macro-orbit.m-carbs {
+  animation: orbitCarbs 3s linear infinite reverse;
+}
+@keyframes orbitCarbs {
+  from { transform: rotateX(-45deg) rotateY(45deg) rotateZ(0deg); }
+  to { transform: rotateX(-45deg) rotateY(45deg) rotateZ(360deg); }
+}
+
+.macro-orbit.m-fats {
+  animation: orbitFats 5.5s linear infinite;
+}
+@keyframes orbitFats {
+  from { transform: rotateY(70deg) rotateX(10deg) rotateZ(0deg); }
+  to { transform: rotateY(70deg) rotateX(10deg) rotateZ(360deg); }
+}
+
+.macro-electron {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  margin-top: -3.5px;
+  margin-left: -3.5px;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.macro-electron.c-cyan {
+  background: var(--cyan);
+  box-shadow: 0 0 8px var(--cyan);
+}
+.macro-electron.c-indigo {
+  background: var(--indigo);
+  box-shadow: 0 0 8px var(--indigo);
+}
+.macro-electron.c-green {
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green);
+}
+
+/* ════════════ 3D RECIPE SCANNER & VIDEO PLAYER ════════════ */
+
+.recipe-empty-scanner-card {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  min-height: 340px;
+}
+
+.scanner-viewport-container {
+  height: 180px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 800px;
+  position: relative;
+  overflow: visible;
+}
+
+.scanner-3d-scene {
+  width: 120px;
+  height: 120px;
+  position: relative;
+  transform-style: preserve-3d;
+  transform: rotateX(25deg);
+  animation: scannerFloat 4s ease-in-out infinite;
+}
+
+@keyframes scannerFloat {
+  0%, 100% { transform: rotateX(25deg) translateY(0px); }
+  50% { transform: rotateX(25deg) translateY(-8px); }
+}
+
+/* Spinner active scan state for loading page */
+.recipe-loading {
+  animation: scannerLoadingSpin 4s linear infinite !important;
+}
+@keyframes scannerLoadingSpin {
+  0% { transform: rotateX(25deg) rotateY(0deg); }
+  100% { transform: rotateX(25deg) rotateY(360deg); }
+}
+
+.scanner-plate {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 130px;
+  height: 130px;
+  margin-top: -65px;
+  margin-left: -65px;
+  border-radius: 50%;
+  border: 2px solid rgba(6, 182, 212, 0.4);
+  background: rgba(6, 182, 212, 0.04);
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.15), inset 0 0 15px rgba(6, 182, 212, 0.15);
+  transform: rotateX(90deg) translateZ(-35px);
+  transform-style: preserve-3d;
+}
+
+.scanner-cloche {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100px;
+  height: 70px;
+  margin-top: -60px;
+  margin-left: -50px;
+  border-radius: 50px 50px 0 0;
+  border: 1px dashed rgba(99, 102, 241, 0.3);
+  background: linear-gradient(180deg, rgba(99, 102, 241, 0.05) 0%, transparent 100%);
+  transform-style: preserve-3d;
+}
+
+.scanner-beam {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 110px;
+  height: 110px;
+  margin-top: -55px;
+  margin-left: -55px;
+  border-radius: 50%;
+  border: 2px solid var(--green);
+  box-shadow: 0 0 12px var(--green), inset 0 0 8px var(--green);
+  transform: rotateX(90deg) translateZ(-35px);
+  animation: laserScan 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes laserScan {
+  0%, 100% { transform: rotateX(90deg) translateZ(-35px); opacity: 0.2; }
+  50% { transform: rotateX(90deg) translateZ(10px); opacity: 0.95; filter: drop-shadow(0 0 4px var(--green)); }
+}
+
+.scanner-chef-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 32px !important;
+  color: var(--t1);
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.6), 0 0 15px rgba(6, 182, 212, 0.4);
+  z-index: 10;
+}
+
+/* AI Cooking Companion Video */
+
+.cooking-video-card {
+  padding: 24px;
+}
+
+.cooking-video-player-container {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  background: #000;
+}
+
+.cooking-video-element {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.video-telemetry-overlay {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  right: 12px;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+}
+
+.video-telemetry-overlay .telemetry-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.video-telemetry-overlay .telemetry-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ef4444;
+  box-shadow: 0 0 6px #ef4444;
+}
+
+.video-telemetry-overlay .blink {
+  animation: telemetryBlink 1.5s infinite ease-in-out;
+}
+
+@keyframes telemetryBlink {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+/* ════════════ 3D DIET PRESETS REACTOR CORE (PRESETS VIEW) ════════════ */
+
+.presets-view {
+  display: flex;
+  flex-direction: column;
+}
+
+.preset-selector-card:hover {
+  transform: translateY(-2px);
+}
+
+.preset-selector-card.active {
+  background: rgba(255, 255, 255, 0.02) !important;
+}
+
+.preset-details-card {
+  margin-top: 20px;
+  padding: 24px;
+}
+
+.diet-reactor-card {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  min-height: 380px;
+}
+
+.reactor-viewport-container {
+  height: 240px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1200px;
+  position: relative;
+  overflow: visible;
+  margin: 10px 0;
+}
+
+.reactor-scene {
+  width: 160px;
+  height: 160px;
+  position: relative;
+  transform-style: preserve-3d;
+  transform: rotateX(25deg);
+  transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Orbiting active state */
+.reactor-scene.orbiting {
+  animation: reactorOrbit 16s linear infinite;
+}
+
+@keyframes reactorOrbit {
+  0% { transform: rotateX(25deg) rotateY(0deg); }
+  100% { transform: rotateX(25deg) rotateY(360deg); }
+}
+
+/* Focus active state rotates slightly and locks */
+.reactor-scene.focus-cutting {
+  transform: rotateX(20deg) rotateY(0deg);
+}
+.reactor-scene.focus-maintaining {
+  transform: rotateX(20deg) rotateY(-120deg);
+}
+.reactor-scene.focus-bulking {
+  transform: rotateX(20deg) rotateY(-240deg);
+}
+
+.reactor-platform {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 130px;
+  height: 130px;
+  margin-top: -65px;
+  margin-left: -65px;
+  border-radius: 50%;
+  border: 2px solid rgba(99, 102, 241, 0.25);
+  background: rgba(99, 102, 241, 0.03);
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.1), inset 0 0 10px rgba(99, 102, 241, 0.1);
+  transform: rotateX(90deg) translateZ(-35px);
+  transform-style: preserve-3d;
+}
+
+.reactor-pill {
+  width: 24px;
+  height: 52px;
+  border-radius: 12px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -65px;
+  margin-left: -12px;
+  transform-style: preserve-3d;
+  display: flex;
+  justify-content: center;
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pill-lbl {
+  position: absolute;
+  top: 20px;
+  font-size: 8px;
+  font-family: var(--font-mono);
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+  pointer-events: none;
+  transform: rotateY(0deg) translateZ(4px);
+  text-align: center;
+}
+
+/* Core Pill Coordinates & Default Positions */
+.pill-cutting {
+  transform: rotateY(0deg) translateZ(62px);
+  background: linear-gradient(180deg, var(--cyan) 0%, rgba(6, 182, 212, 0.2) 100%);
+  border: 1.5px solid rgba(6, 182, 212, 0.85);
+  box-shadow: 0 0 12px rgba(6, 182, 212, 0.45);
+}
+
+.pill-maintaining {
+  transform: rotateY(120deg) translateZ(62px);
+  background: linear-gradient(180deg, var(--indigo) 0%, rgba(129, 140, 248, 0.2) 100%);
+  border: 1.5px solid rgba(129, 140, 248, 0.85);
+  box-shadow: 0 0 12px rgba(129, 140, 248, 0.45);
+}
+
+.pill-bulking {
+  transform: rotateY(240deg) translateZ(62px);
+  background: linear-gradient(180deg, #ec4899 0%, rgba(236, 72, 153, 0.2) 100%);
+  border: 1.5px solid rgba(236, 72, 153, 0.85);
+  box-shadow: 0 0 12px rgba(236, 72, 153, 0.45);
+}
+
+/* Focused State: selected pill shifts to center and glows/scales */
+.focus-cutting .pill-cutting {
+  transform: rotateY(0deg) translate3d(0, -18px, 15px) scale(1.35);
+  box-shadow: 0 0 25px rgba(6, 182, 212, 0.95);
+  background: linear-gradient(180deg, var(--cyan) 0%, rgba(6, 182, 212, 0.5) 100%);
+}
+.focus-cutting .pill-maintaining {
+  transform: rotateY(120deg) translateZ(85px) translateY(20px) scale(0.7);
+  opacity: 0.2;
+  filter: blur(1.5px);
+}
+.focus-cutting .pill-bulking {
+  transform: rotateY(240deg) translateZ(85px) translateY(20px) scale(0.7);
+  opacity: 0.2;
+  filter: blur(1.5px);
+}
+
+.focus-maintaining .pill-maintaining {
+  transform: rotateY(120deg) translate3d(0, -18px, 15px) scale(1.35);
+  box-shadow: 0 0 25px rgba(129, 140, 248, 0.95);
+  background: linear-gradient(180deg, var(--indigo) 0%, rgba(129, 140, 248, 0.5) 100%);
+}
+.focus-maintaining .pill-cutting {
+  transform: rotateY(0deg) translateZ(85px) translateY(20px) scale(0.7);
+  opacity: 0.2;
+  filter: blur(1.5px);
+}
+.focus-maintaining .pill-bulking {
+  transform: rotateY(240deg) translateZ(85px) translateY(20px) scale(0.7);
+  opacity: 0.2;
+  filter: blur(1.5px);
+}
+
+.focus-bulking .pill-bulking {
+  transform: rotateY(240deg) translate3d(0, -18px, 15px) scale(1.35);
+  box-shadow: 0 0 25px rgba(236, 72, 153, 0.95);
+  background: linear-gradient(180deg, #ec4899 0%, rgba(236, 72, 153, 0.5) 100%);
+}
+.focus-bulking .pill-cutting {
+  transform: rotateY(0deg) translateZ(85px) translateY(20px) scale(0.7);
+  opacity: 0.2;
+  filter: blur(1.5px);
+}
+.focus-bulking .pill-maintaining {
+  transform: rotateY(120deg) translateZ(85px) translateY(20px) scale(0.7);
+  opacity: 0.2;
+  filter: blur(1.5px);
+}
+
+/* ════════════ DYNAMIC ACCENT THEMES (PLAN VIEW) ════════════ */
+.theme-lose-weight {
+  --theme-accent: var(--cyan);
+  --theme-accent-dim: var(--cyan-dim);
+  --theme-accent-glow: var(--cyan-glow);
+}
+.theme-gain-muscle {
+  --theme-accent: var(--pink);
+  --theme-accent-dim: var(--pink-dim);
+  --theme-accent-glow: var(--pink-glow);
+}
+.theme-maintain-weight {
+  --theme-accent: var(--indigo);
+  --theme-accent-dim: var(--indigo-dim);
+  --theme-accent-glow: var(--indigo-glow);
+}
+.theme-improve-health {
+  --theme-accent: var(--green);
+  --theme-accent-dim: var(--green-dim);
+  --theme-accent-glow: var(--green-glow);
+}
+
+/* ════════════ FUTURISTIC SEGMENTED CONTROLLERS ════════════ */
+.segmented-control {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 4px;
+  margin-top: 4px;
+}
+
+.segment-btn {
+  background: transparent;
+  border: none;
+  color: var(--t2);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.segment-btn:hover {
+  color: var(--t1);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.segment-btn.active {
+  background: var(--theme-accent, var(--indigo));
+  color: var(--bg);
+  box-shadow: 0 0 12px var(--theme-accent-glow, var(--indigo-dim));
+  font-weight: 800;
+}
+
+.goal-segments {
+  grid-template-columns: 1fr 1fr;
+}
+
+.segment-icon {
+  font-size: 14px !important;
+}
+
+@media (max-width: 480px) {
+  .goal-segments {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ════════════ BIOMETRIC RANGE SLIDERS ════════════ */
+.biometric-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  outline: none;
+  margin-top: 8px;
+  transition: background 0.3s;
+}
+
+.biometric-slider:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Chrome/Safari */
+.biometric-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--theme-accent, var(--indigo));
+  box-shadow: 0 0 8px var(--theme-accent-glow, var(--indigo-dim));
+  cursor: pointer;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.biometric-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.3);
+  background: #fff;
+}
+
+/* Firefox */
+.biometric-slider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--theme-accent, var(--indigo));
+  box-shadow: 0 0 8px var(--theme-accent-glow, var(--indigo-dim));
+  cursor: pointer;
+  border: none;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.biometric-slider::-moz-range-thumb:hover {
+  transform: scale(1.3);
+  background: #fff;
+}
+
+/* ════════════ METABOLIC HUD Readouts ════════════ */
+.hud-glow-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--theme-accent-dim, var(--indigo-dim)) 0%, transparent 100%);
+  opacity: 0.12;
+  pointer-events: none;
+}
+
+.theme-glow-text {
+  text-shadow: 0 0 10px var(--theme-accent-glow, var(--indigo-dim));
+}
+
+.biometric-input-box {
+  border: 1px solid var(--border) !important;
+  background: rgba(255, 255, 255, 0.01) !important;
+  color: var(--theme-accent, var(--indigo)) !important;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  transition: border-color 0.3s, box-shadow 0.3s !important;
+}
+
+.biometric-input-box:focus {
+  border-color: var(--theme-accent, var(--indigo)) !important;
+  box-shadow: 0 0 8px var(--theme-accent-glow, var(--indigo-dim)) !important;
+  background: rgba(255, 255, 255, 0.02) !important;
+}
+
+/* ════════════ 3D GYROSCOPE SCANNER CORE ════════════ */
+.gyro-ring {
+  position: absolute;
+  border: 1px dashed var(--theme-accent-glow, var(--indigo-dim));
+  border-radius: 50%;
+  pointer-events: none;
+  transform-style: preserve-3d;
+  top: 50%;
+  left: 50%;
+  margin-left: -120px;
+  margin-top: -120px;
+  width: 240px;
+  height: 240px;
+}
+
+.gyro-ring-x {
+  transform: rotateX(70deg) rotateY(0deg);
+  animation: gyroSpinX 20s linear infinite;
+  border-color: rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.02);
+}
+
+.gyro-ring-y {
+  transform: rotateX(25deg) rotateY(90deg);
+  animation: gyroSpinY 16s linear infinite;
+  border: 1px solid var(--theme-accent-glow, var(--indigo-dim));
+  opacity: 0.7;
+}
+
+@keyframes gyroSpinX {
+  0% { transform: rotateX(70deg) rotateZ(0deg); }
+  100% { transform: rotateX(70deg) rotateZ(360deg); }
+}
+
+@keyframes gyroSpinY {
+  0% { transform: rotateY(25deg) rotateX(0deg); }
+  100% { transform: rotateY(25deg) rotateX(360deg); }
+}
+
+.scanner-laser {
+  position: absolute;
+  width: 160px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, var(--theme-accent, var(--indigo)) 50%, transparent 100%);
+  box-shadow: 0 0 12px var(--theme-accent, var(--indigo)), 0 0 20px var(--theme-accent-glow, var(--indigo-dim));
+  left: 50%;
+  margin-left: -80px;
+  top: 10px;
+  transform: translate3d(0, 0, 10px);
+  pointer-events: none;
+  opacity: 0.85;
+  animation: scannerScan 4s ease-in-out infinite alternate;
+}
+
+@keyframes scannerScan {
+  0% {
+    top: 15px;
+    opacity: 0.3;
+    transform: scaleX(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleX(1.15);
+  }
+  100% {
+    top: 225px;
+    opacity: 0.3;
+    transform: scaleX(0.9);
+  }
+}
+
+/* Helix Dot dynamic overrides */
+.theme-lose-weight .dna-dot {
+  background: var(--cyan);
+  box-shadow: 0 0 10px var(--cyan);
+}
+.theme-gain-muscle .dna-dot {
+  background: var(--pink);
+  box-shadow: 0 0 10px var(--pink);
+}
+.theme-maintain-weight .dna-dot {
+  background: var(--indigo);
+  box-shadow: 0 0 10px var(--indigo);
+}
+.theme-improve-health .dna-dot {
+  background: var(--green);
+  box-shadow: 0 0 10px var(--green);
+}
+
+
+
