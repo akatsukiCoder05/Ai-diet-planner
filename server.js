@@ -47,9 +47,9 @@ app.post('/api/generate-plan', async (req, res) => {
   try {
     const { age, gender, height, weight, activityLevel, goal } = req.body;
 
-    const GROQ_API_KEY = process.env.GROQ_API_KEY;
+    const GROQ_API_KEY = process.env.GROQ_API_KEY || process.env.VITE_GROQ_API_KEY;
     if (!GROQ_API_KEY) {
-      return res.status(500).json({ error: 'GROQ_API_KEY not configured on server' });
+      return res.status(500).json({ error: 'GROQ_API_KEY not configured on server. Add GROQ_API_KEY in Render Environment Variables.' });
     }
 
     const prompt = `
