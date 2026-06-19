@@ -1,0 +1,101 @@
+╔════════════════════════════════════════════════════════════════════╗
+║                                                                    ║
+║              📦 GIT PUSH TO GITHUB - QUICK COMMANDS                ║
+║                                                                    ║
+╚════════════════════════════════════════════════════════════════════╝
+
+⚠️  BEFORE YOU START:
+   Move API key to .env file (see GITHUB_PUSH_GUIDE.md Step 0)
+
+═══════════════════════════════════════════════════════════════════
+
+🚀 FIRST TIME SETUP (Run Once):
+
+   1. git init
+   2. git add .
+   3. git commit -m "Initial commit: AI Diet Planner"
+   4. Create repo on GitHub.com
+   5. git remote add origin https://github.com/YOUR-USERNAME/REPO-NAME.git
+   6. git branch -M main
+   7. git push -u origin main
+
+═══════════════════════════════════════════════════════════════════
+
+🔄 REGULAR UPDATES (Every time you make changes):
+
+   git add .
+   git commit -m "Description of changes"
+   git push
+
+═══════════════════════════════════════════════════════════════════
+
+📋 USEFUL COMMANDS:
+
+   git status              → See what changed
+   git log --oneline       → See commit history
+   git diff                → See detailed changes
+   
+   git add <file>          → Stage specific file
+   git add .               → Stage all files
+   
+   git commit -m "msg"     → Commit with message
+   git push                → Push to GitHub
+   git pull                → Pull from GitHub
+
+═══════════════════════════════════════════════════════════════════
+
+🌿 CREATE NEW BRANCH:
+
+   git checkout -b feature/my-feature
+   git add .
+   git commit -m "Add new feature"
+   git push -u origin feature/my-feature
+
+═══════════════════════════════════════════════════════════════════
+
+⚠️  COMMON ISSUES:
+
+   Problem: Permission denied
+   Fix: git remote set-url origin https://github.com/USER/REPO.git
+
+   Problem: Failed to push
+   Fix: git pull origin main --rebase
+        git push
+
+   Problem: Need to undo last commit
+   Fix: git reset --soft HEAD~1
+
+═══════════════════════════════════════════════════════════════════
+
+🔐 SECURITY CHECKLIST:
+
+   [✓] API key moved to .env
+   [✓] .env in .gitignore
+   [✓] No passwords in code
+   [✓] Reviewed git status
+
+═══════════════════════════════════════════════════════════════════
+
+📝 EXAMPLE WORKFLOW:
+
+   # Make changes to files
+   git status                    # Check what changed
+   git add .                     # Stage all changes
+   git commit -m "Updated UI"    # Commit
+   git push                      # Push to GitHub
+
+═══════════════════════════════════════════════════════════════════
+
+💡 PRO TIPS:
+
+   • Commit often with clear messages
+   • Pull before push to avoid conflicts
+   • Use branches for new features
+   • Never commit API keys or passwords
+   • Check git status before committing
+
+═══════════════════════════════════════════════════════════════════
+
+📚 FULL GUIDE: See GITHUB_PUSH_GUIDE.md
+
+═══════════════════════════════════════════════════════════════════

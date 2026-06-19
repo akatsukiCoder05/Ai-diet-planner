@@ -1,0 +1,256 @@
+/* Organic Wellness Theme */
+:root {
+  --primary: #4cd7f6;
+  --primary-container: #06b6d4;
+  --background: #0b1326;
+  --surface: #121a2e;
+  --surface-container: #171f33;
+  --surface-container-low: #131b2e;
+  --on-surface: #dae2fd;
+  --on-surface-variant: #aeb9d4;
+  --outline: #3d494c;
+  --secondary: #adc6ff;
+  --tertiary: #d0bcff;
+  --error: #ffb4ab;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #0b1326;
+  color: #dae2fd;
+  font-family: 'Inter', sans-serif;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, .serif-font {
+  font-family: 'DM Serif Display', serif;
+  letter-spacing: 0.02em;
+}
+
+/* Organic Card Design */
+.organic-card {
+  background: linear-gradient(145deg, rgba(23, 31, 51, 0.6) 0%, rgba(18, 26, 46, 0.4) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3);
+}
+
+/* Soft Glow Effect */
+.soft-glow:hover {
+  box-shadow: 0 0 25px rgba(76, 215, 246, 0.15);
+}
+
+/* Warm Active State */
+.warm-active {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.15) 0%, rgba(5, 102, 217, 0.15) 100%);
+  border-color: rgba(6, 182, 212, 0.3);
+}
+
+/* Floating Navigation */
+.floating-nav {
+  backdrop-filter: blur(20px);
+  background: rgba(18, 26, 46, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Material Symbols */
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+}
+
+/* Staggered Fade In Animation */
+.staggered-item {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeIn 0.8s forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Spin Animation */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Selection Color */
+::selection {
+  background: rgba(76, 215, 246, 0.3);
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0b1326;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #171f33;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #1f2940;
+}
+
+/* Utility Classes */
+.bg-background {
+  background-color: var(--background);
+}
+
+.bg-surface {
+  background-color: var(--surface);
+}
+
+.text-on-surface {
+  color: var(--on-surface);
+}
+
+.text-on-surface-variant {
+  color: var(--on-surface-variant);
+}
+
+.text-primary {
+  color: var(--primary);
+}
+
+.text-secondary {
+  color: var(--secondary);
+}
+
+.text-tertiary {
+  color: var(--tertiary);
+}
+
+.text-error {
+  color: var(--error);
+}
+
+/* Focus States */
+input:focus,
+select:focus,
+button:focus {
+  outline: none;
+}
+
+/* Custom Select Arrow */
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%234cd7f6' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  background-size: 12px;
+}
+
+/* Responsive Typography */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2.5rem;
+  }
+  
+  h2 {
+    font-size: 2rem;
+  }
+  
+  h3 {
+    font-size: 1.5rem;
+  }
+}
+
+/* Smooth Transitions */
+button,
+a,
+input,
+select {
+  transition: all 0.3s ease;
+}
+
+/* Grid Utilities */
+.grid {
+  display: grid;
+}
+
+/* Flex Utilities */
+.flex {
+  display: flex;
+}
+
+/* Disabled State */
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Active States */
+button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+/* Text Utilities */
+.font-light {
+  font-weight: 300;
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.italic {
+  font-style: italic;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.tracking-wide {
+  letter-spacing: 0.025em;
+}
+
+.tracking-widest {
+  letter-spacing: 0.1em;
+}
+
+.tracking-tighter {
+  letter-spacing: -0.05em;
+}
