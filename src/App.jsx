@@ -1,16 +1,31 @@
 import { useState, useEffect } from "react";
 import "./App.css";
-import Groq from "groq-sdk";
 
 // Environment variables
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY;
 
-// ⚠️ IMPORTANT: API key should be in .env file
-const groq = new Groq({
-  apiKey: GROQ_API_KEY,
-  dangerouslyAllowBrowser: true,
-});
+// Direct fetch helper for Groq API (no SDK = no module-level crash)
+async function callGroq(messages) {
+  const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${GROQ_API_KEY}`,
+    },
+    body: JSON.stringify({
+      model: 'llama-3.3-70b-versatile',
+      messages,
+      temperature: 0.7,
+      max_tokens: 1500,
+    }),
+  });
+  if (!response.ok) {
+    const err = await response.text();
+    throw new Error(`Groq API error: ${err}`);
+  }
+  return response.json();
+}
 
 function App() {
   const [formData, setFormData] = useState({
@@ -81,11 +96,15 @@ function App() {
     setDietPlan("");
     setShowResults(false);
 
+    if (!GROQ_API_KEY) {
+      setDietPlan("⚠️ API key not configured. Please add VITE_GROQ_API_KEY in Vercel Environment Variables.");
+      setLoading(false);
+      return;
+    }
+
     try {
-      const response = await groq.chat.completions.create({
-        model: "llama-3.3-70b-versatile",
-        messages: [
-          {
+      const result = await callGroq([
+        {
             role: "system",
             content:
               "You are an expert nutritionist. Always respond in clean structured sections with headings and bullet points only. No long paragraphs.",
@@ -162,12 +181,9 @@ RULES:
 - Only clean bullet points
             `,
           },
-        ],
-        temperature: 0.7,
-        max_completion_tokens: 1500,
-      });
+      ]);
 
-      const content = response.choices[0].message.content;
+      const content = result.choices[0].message.content;
       setDietPlan(content);
       parseDietPlan(content);
       setShowResults(true);
