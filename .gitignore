@@ -27,6 +27,8 @@ dist-ssr
 .env
 .env.local
 .env.*.local
+.env.production
+.env.development
 
 # API Keys (IMPORTANT!)
 # Make sure your Groq API key is not committed

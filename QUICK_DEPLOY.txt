@@ -1,0 +1,94 @@
+═══════════════════════════════════════════════════════════════
+                 🚀 QUICK DEPLOY COMMANDS
+═══════════════════════════════════════════════════════════════
+
+📦 PUSH TO GITHUB (Copy-Paste These Commands):
+
+cd d:\fullstack\Ditepalnner
+git init
+git add .
+git commit -m "Initial commit: AI Diet Planner"
+git branch -M main
+git remote add origin https://github.com/YOUR_USERNAME/ai-diet-planner.git
+git push -u origin main
+
+⚠️  REPLACE "YOUR_USERNAME" with your actual GitHub username!
+
+═══════════════════════════════════════════════════════════════
+
+🌐 DEPLOY TO VERCEL:
+
+1. Go to: https://vercel.com
+2. Sign in with GitHub
+3. Click "Add New..." → "Project"
+4. Import "ai-diet-planner"
+5. Add Environment Variable:
+   • VITE_GROQ_API_KEY = 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
+6. Click "Deploy"
+7. After deploy, add another variable:
+   • VITE_API_URL = (your vercel URL)
+8. Redeploy
+
+═══════════════════════════════════════════════════════════════
+
+🧪 TEST BUILD LOCALLY FIRST:
+
+npm run build
+npm run preview
+
+Then open: http://localhost:4173
+
+If it works locally, it will work on Vercel!
+
+═══════════════════════════════════════════════════════════════
+
+🔧 FIX BLACK SCREEN:
+
+1. Check browser console (F12)
+2. Look for errors
+3. Make sure vite.config.js has: base: '/'
+4. Rebuild: npm run build
+
+═══════════════════════════════════════════════════════════════
+
+📚 DETAILED GUIDES:
+
+• DEPLOY_STEPS.md     → Step-by-step deployment
+• GITHUB_DEPLOY.md    → Full GitHub & deployment guide
+• TROUBLESHOOTING.md  → Fix common issues
+
+═══════════════════════════════════════════════════════════════
+
+✅ FILES ALREADY CONFIGURED FOR DEPLOYMENT:
+
+✓ .gitignore          → Excludes node_modules, .env
+✓ .env                → API key stored safely
+✓ .env.example        → Template for others
+✓ vercel.json         → Vercel configuration
+✓ App.jsx             → Uses environment variables
+✓ server.js           → Backend ready
+
+═══════════════════════════════════════════════════════════════
+
+🎯 QUICK CHECKLIST:
+
+□ Test locally: npm run preview
+□ Create GitHub repo
+□ Push code: git push
+□ Deploy to Vercel
+□ Add environment variables
+□ Test deployed site
+
+═══════════════════════════════════════════════════════════════
+
+📞 HELP:
+
+• Black screen? Read TROUBLESHOOTING.md
+• Can't push? Check if git is initialized
+• API errors? Set VITE_API_URL correctly
+
+═══════════════════════════════════════════════════════════════
+
+                  YOU'RE READY TO DEPLOY! 🎉
+
+═══════════════════════════════════════════════════════════════

@@ -2,9 +2,13 @@ import { useState, useEffect } from "react";
 import "./App.css";
 import Groq from "groq-sdk";
 
-// ⚠️ IMPORTANT: DO NOT expose real API key in production
+// Environment variables
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY;
+
+// ⚠️ IMPORTANT: API key should be in .env file
 const groq = new Groq({
-  apiKey: process.env.GROQ_KEY,
+  apiKey: GROQ_API_KEY,
   dangerouslyAllowBrowser: true,
 });
 
@@ -189,7 +193,7 @@ RULES:
     setDownloadingPDF(true);
 
     try {
-      const response = await fetch('http://localhost:5000/api/generate-pdf', {
+      const response = await fetch(`${API_URL}/api/generate-pdf`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -240,7 +244,7 @@ RULES:
     }
 
     try {
-      const response = await fetch('http://localhost:5000/api/save-plan', {
+      const response = await fetch(`${API_URL}/api/save-plan`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -410,7 +414,7 @@ RULES:
 
   async function checkServerStatus() {
     try {
-      const response = await fetch('http://localhost:5000/api/health', {
+      const response = await fetch(`${API_URL}/api/health`, {
         method: 'GET',
       });
       
