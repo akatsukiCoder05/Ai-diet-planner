@@ -12,13 +12,149 @@ function cleanTextForPDF(text) {
              .replace(/[^\x00-\x7F]/g, ''); // Remove non-ASCII characters
 }
 
-// Middleware
-app.use(cors());
-app.use(express.json());
+// Middleware - allow Vercel frontend and localhost
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:3000',
+  'https://ai-diet-planner-uko9.onrender.com',
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    // Allow requests with no origin (mobile apps, Postman, etc.)
+    if (!origin) return callback(null, true);
+    // Allow all Vercel deployments
+    if (origin.endsWith('.vercel.app') || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    callback(new Error('Not allowed by CORS'));
+  },
+  methods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
+
+app.use(express.json({ limit: '10mb' }));
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', message: 'Server is running' });
+  res.json({ status: 'ok', message: 'Server is running', timestamp: new Date().toISOString() });
+});
+
+// ─────────────────────────────────────────────────────────
+// Generate AI Diet Plan (calls Groq server-side)
+// ─────────────────────────────────────────────────────────
+app.post('/api/generate-plan', async (req, res) => {
+  try {
+    const { age, gender, height, weight, activityLevel, goal } = req.body;
+
+    const GROQ_API_KEY = process.env.GROQ_API_KEY;
+    if (!GROQ_API_KEY) {
+      return res.status(500).json({ error: 'GROQ_API_KEY not configured on server' });
+    }
+
+    const prompt = `
+Create a structured healthy diet plan.
+
+User Details:
+Age: ${age}
+Gender: ${gender}
+Height: ${height} cm
+Weight: ${weight} kg
+Activity Level: ${activityLevel}
+Goal: ${goal}
+
+FORMAT STRICTLY LIKE THIS:
+
+TITLE: (short goal-based title)
+
+BMI:
+- value: XX.X
+- status: (Underweight/Normal/Overweight/Obese)
+- explanation
+
+CALORIES:
+- daily requirement: XXXX kcal
+- protein: XXXg
+- carbs: XXXg
+- fats: XXXg
+
+MEAL PLAN:
+Breakfast:
+- meal name
+- XXX kcal
+- XXg protein
+
+Lunch:
+- meal name
+- XXX kcal
+- XXg protein
+
+Dinner:
+- meal name
+- XXX kcal
+- XXg protein
+
+Snacks:
+- meal name
+- XXX kcal
+- XXg protein
+
+WATER INTAKE:
+- X.X liters
+
+FOODS TO AVOID:
+- item 1
+- item 2
+- item 3
+
+EXERCISE PLAN:
+- day/time: activity
+- day/time: activity
+- day/time: activity
+
+TIPS:
+- tip 1
+- tip 2
+
+RULES:
+- No paragraphs
+- No JSON
+- Only clean bullet points
+    `;
+
+    const groqResponse = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${GROQ_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: 'llama-3.3-70b-versatile',
+        messages: [
+          {
+            role: 'system',
+            content: 'You are an expert nutritionist. Always respond in clean structured sections with headings and bullet points only. No long paragraphs.',
+          },
+          { role: 'user', content: prompt },
+        ],
+        temperature: 0.7,
+        max_tokens: 1500,
+      }),
+    });
+
+    if (!groqResponse.ok) {
+      const errText = await groqResponse.text();
+      return res.status(502).json({ error: 'Groq API error', details: errText });
+    }
+
+    const data = await groqResponse.json();
+    const content = data.choices[0].message.content;
+
+    res.json({ success: true, content });
+  } catch (error) {
+    console.error('Error generating diet plan:', error);
+    res.status(500).json({ error: 'Failed to generate diet plan', details: error.message });
+  }
 });
 
 // Generate PDF from diet plan text

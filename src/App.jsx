@@ -3,29 +3,7 @@ import "./App.css";
 
 // Environment variables - backend hosted on Render
 const API_URL = import.meta.env.VITE_API_URL || 'https://ai-diet-planner-uko9.onrender.com';
-const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY;
 
-// Direct fetch helper for Groq API (no SDK = no module-level crash)
-async function callGroq(messages) {
-  const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${GROQ_API_KEY}`,
-    },
-    body: JSON.stringify({
-      model: 'llama-3.3-70b-versatile',
-      messages,
-      temperature: 0.7,
-      max_tokens: 1500,
-    }),
-  });
-  if (!response.ok) {
-    const err = await response.text();
-    throw new Error(`Groq API error: ${err}`);
-  }
-  return response.json();
-}
 
 function App() {
   const [formData, setFormData] = useState({
@@ -96,105 +74,31 @@ function App() {
     setDietPlan("");
     setShowResults(false);
 
-    if (!GROQ_API_KEY) {
-      setDietPlan("⚠️ API key not configured. Please add VITE_GROQ_API_KEY in Vercel Environment Variables.");
-      setLoading(false);
-      return;
-    }
-
     try {
-      const result = await callGroq([
-        {
-            role: "system",
-            content:
-              "You are an expert nutritionist. Always respond in clean structured sections with headings and bullet points only. No long paragraphs.",
-          },
-          {
-            role: "user",
-            content: `
-Create a structured healthy diet plan.
+      const response = await fetch(`${API_URL}/api/generate-plan`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
 
-User Details:
-Age: ${formData.age}
-Gender: ${formData.gender}
-Height: ${formData.height} cm
-Weight: ${formData.weight} kg
-Activity Level: ${formData.activityLevel}
-Goal: ${formData.goal}
+      const data = await response.json();
 
-FORMAT STRICTLY LIKE THIS:
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || 'Failed to generate diet plan');
+      }
 
-TITLE: (short goal-based title)
-
-BMI:
-- value: XX.X
-- status: (Underweight/Normal/Overweight/Obese)
-- explanation
-
-CALORIES:
-- daily requirement: XXXX kcal
-- protein: XXXg
-- carbs: XXXg
-- fats: XXXg
-
-MEAL PLAN:
-Breakfast:
-- meal name
-- XXX kcal
-- XXg protein
-
-Lunch:
-- meal name
-- XXX kcal
-- XXg protein
-
-Dinner:
-- meal name
-- XXX kcal
-- XXg protein
-
-Snacks:
-- meal name
-- XXX kcal
-- XXg protein
-
-WATER INTAKE:
-- X.X liters
-
-FOODS TO AVOID:
-- item 1
-- item 2
-- item 3
-
-EXERCISE PLAN:
-- day/time: activity
-- day/time: activity
-- day/time: activity
-
-TIPS:
-- tip 1
-- tip 2
-
-RULES:
-- No paragraphs
-- No JSON
-- Only clean bullet points
-            `,
-          },
-      ]);
-
-      const content = result.choices[0].message.content;
+      const content = data.content;
       setDietPlan(content);
       parseDietPlan(content);
       setShowResults(true);
-      
+
       // Scroll to results
       setTimeout(() => {
         document.getElementById("results")?.scrollIntoView({ behavior: "smooth" });
       }, 500);
     } catch (error) {
-      console.log(error);
-      setDietPlan("Error generating diet plan. Please try again.");
+      console.error('Generate plan error:', error);
+      setDietPlan(`Error: ${error.message}. Please try again.`);
     }
 
     setLoading(false);
