@@ -91,14 +91,16 @@ function App() {
       setDietPlan(content);
       parseDietPlan(content);
       setShowResults(true);
+      setServerStatus('online'); // backend responded, so it's online
 
       // Scroll to results
       setTimeout(() => {
         document.getElementById("results")?.scrollIntoView({ behavior: "smooth" });
-      }, 500);
+      }, 300);
     } catch (error) {
       console.error('Generate plan error:', error);
-      setDietPlan(`Error: ${error.message}. Please try again.`);
+      setDietPlan(`Error: ${error.message}`);
+      setShowResults(true); // show error section
     }
 
     setLoading(false);
@@ -539,28 +541,51 @@ function App() {
               <div className="flex justify-center gap-4">
                 <button 
                   onClick={downloadPDF}
-                  disabled={downloadingPDF || serverStatus === 'offline'}
+                  disabled={downloadingPDF}
                   className="text-xs uppercase tracking-widest text-on-surface-variant hover:text-primary transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                  title={serverStatus === 'offline' ? 'Server is offline. Run: npm run server' : 'Download your diet plan as PDF'}
+                  title="Download your diet plan as PDF"
                 >
                   <span className="material-symbols-outlined text-base">
                     {downloadingPDF ? 'progress_activity' : 'file_download'}
                   </span> 
-                  {downloadingPDF ? 'Generating...' : serverStatus === 'offline' ? 'Server Offline' : 'Download PDF'}
+                  {downloadingPDF ? 'Generating...' : 'Download PDF'}
                 </button>
                 <span className="text-white/10">|</span>
                 <button 
                   onClick={savePlan}
-                  disabled={serverStatus === 'offline'}
-                  className="text-xs uppercase tracking-widest text-on-surface-variant hover:text-primary transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                  title={serverStatus === 'offline' ? 'Server is offline. Run: npm run server' : 'Save your plan to history'}
+                  className="text-xs uppercase tracking-widest text-on-surface-variant hover:text-primary transition-all flex items-center gap-2"
+                  title="Save your plan to history"
                 >
                   <span className="material-symbols-outlined text-base">ios_share</span> Save Plan
                 </button>
               </div>
             </div>
 
-            {/* Vital Statistics (Centered Single Column) */}
+            {/* Error Display */}
+            {dietPlan.startsWith('Error:') && (
+              <div className="organic-card p-8 rounded-3xl border border-red-500/30 text-center staggered-item">
+                <span className="material-symbols-outlined text-4xl text-error mb-4 block">error</span>
+                <p className="text-error font-medium mb-2">Something went wrong</p>
+                <p className="text-on-surface-variant text-sm">{dietPlan}</p>
+                <button
+                  onClick={generateDietPlan}
+                  className="mt-6 px-6 py-2 rounded-full bg-primary/10 text-primary text-sm hover:bg-primary/20 transition-all"
+                >
+                  Try Again
+                </button>
+              </div>
+            )}
+
+            {/* Raw AI Plan Text — always visible as primary result */}
+            {!dietPlan.startsWith('Error:') && dietPlan && (
+              <div className="organic-card p-8 rounded-3xl staggered-item" style={{ animationDelay: '0.25s' }}>
+                <h3 className="text-lg serif-font text-primary mb-4">Your AI Generated Plan</h3>
+                <pre className="text-on-surface-variant text-sm whitespace-pre-wrap leading-relaxed font-sans">{dietPlan}</pre>
+              </div>
+            )}
+
+            {/* Vital Statistics — only shown for successful plans */}
+            {!dietPlan.startsWith('Error:') && (
             <div className="space-y-6">
               <div className="organic-card p-12 rounded-[3rem] text-center staggered-item" style={{ animationDelay: "0.3s" }}>
                 <span className="text-xs uppercase tracking-[0.2em] text-on-surface-variant/50 font-medium mb-6 block">
@@ -652,6 +677,7 @@ function App() {
                 </div>
               </div>
             </div>
+            )}
 
             {/* The Daily Rhythm (Vertical Timeline) */}
             <div className="staggered-item" style={{ animationDelay: "0.6s" }}>
